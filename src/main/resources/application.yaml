@@ -1,0 +1,28 @@
+server:
+  port: ${PORT_TO_EXPOSE:8080}
+
+logging:
+  level:
+    ROOT: INFO
+    org.springframework: INFO
+
+
+spring:
+  flyway:
+    baselineOnMigrate: true
+    enabled: true
+  application:
+      name: DOZA_coffeine
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/DOZAshop?currentSchema=public
+    username: postgres
+    password: password
+  jpa.hibernate.ddl-auto: none
+  jpa.database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+springfox:
+  documentation:
+    swagger:
+      v2:
+        path: /v3/api-docs
