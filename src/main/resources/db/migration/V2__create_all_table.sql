@@ -11,7 +11,7 @@ CREATE TABLE subcategory
     title VARCHAR(255) NOT NULL CONSTRAINT subcategory_title_key UNIQUE,
     url VARCHAR(50) NOT NULL CONSTRAINT subcategory_url_key UNIQUE,
     category_id INTEGER NOT NULL,
-    CONSTRAINT fk_subcategory_category_id FOREIGN KEY(category_id) REFERENCES category(id)
+    CONSTRAINT fk_subcategory_cat_id FOREIGN KEY(category_id) REFERENCES category(id)
 );
 
 CREATE TABLE product
@@ -19,9 +19,9 @@ CREATE TABLE product
     id INTEGER NOT NULL CONSTRAINT product_id_pkey PRIMARY KEY,
     header VARCHAR(255) NOT NULL,
     price INTEGER NOT NULL,
-    description VARCHAR NOT NULL,cd 
-    subcat_id INTEGER NOT NULL,
-    CONSTRAINT fk_product_id FOREIGN KEY(subcat_id) REFERENCES subcategory(id)
+    description TEXT NOT NULL,
+    subcategory_id INTEGER NOT NULL,
+    CONSTRAINT fk_product_id FOREIGN KEY(subcategory_id) REFERENCES subcategory(id)
 );
 
 CREATE TABlE filter_tea

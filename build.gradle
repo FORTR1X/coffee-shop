@@ -14,6 +14,8 @@ configurations {
 	}
 }
 
+def mapstructVersion = '1.5.1.Final'
+
 repositories {
 	mavenCentral()
 }
@@ -25,6 +27,10 @@ dependencies {
 //	implementation 'org.springframework.boot:spring-boot-starter-security'
 
 	implementation 'org.flywaydb:flyway-core:8.5.0'
+
+	implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+	compileOnly "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 
 	compileOnly 'org.projectlombok:lombok'
 

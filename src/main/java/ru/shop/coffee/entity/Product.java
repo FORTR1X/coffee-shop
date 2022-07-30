@@ -1,5 +1,6 @@
 package ru.shop.coffee.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import javax.persistence.*;
 @Setter
 @ToString
 @Entity
+@Table(name = "product")
 public class Product {
 
   @Id
@@ -25,7 +27,9 @@ public class Product {
   @Column(name = "description", nullable = false)
   private String description;
 
-  @Column(name = "subcatId", nullable = false)
-  private Integer subcatId;
+  @JsonBackReference
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "subcategory_id")
+  private Subcategory subcategory;
 
 }
