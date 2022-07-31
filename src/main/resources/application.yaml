@@ -21,6 +21,9 @@ spring:
   jpa.hibernate.ddl-auto: none
   jpa.database-platform: org.hibernate.dialect.PostgreSQLDialect
 
+secure:
+  signingKey: sign_key_for_jwt
+
 springfox:
   documentation:
     swagger:

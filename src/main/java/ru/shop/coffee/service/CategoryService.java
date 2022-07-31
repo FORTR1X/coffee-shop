@@ -1,6 +1,8 @@
 package ru.shop.coffee.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.shop.coffee.dto.category.CategoryCreateDto;
 import ru.shop.coffee.dto.category.CategoryDto;
@@ -16,6 +18,8 @@ public class CategoryService {
 
   private final CategoryRepository categoryRepository;
 
+  private final BCryptPasswordEncoder passwordEncoder;
+
   public CategoryDto create(CategoryCreateDto request) {
 
     Category category = categoryMapper.toCategory(request);
@@ -26,6 +30,9 @@ public class CategoryService {
   }
 
   public CategoryDto getById(Integer id) {
+    String pass = passwordEncoder.encode("admin");
+    System.out.println(pass);
+
     return categoryMapper.categoryToCategoryDto(categoryRepository.findById(id).orElseThrow());
   }
 

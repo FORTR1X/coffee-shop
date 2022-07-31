@@ -29,8 +29,6 @@ public class ProductService {
     limit = limit == null ? DEFAULT_PAGE_LIMIT_SIZE : limit;
     page = page == null ? DEFAULT_PAGE_SIZE : page;
 
-    System.out.println("limit: " + limit + "|| page: " + page);
-
     List<Product> productList = subcategoryRepository.findById(subcatId)
             .orElseThrow()
             .getProducts();
