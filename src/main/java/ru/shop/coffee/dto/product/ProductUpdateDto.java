@@ -17,12 +17,15 @@ import javax.validation.constraints.NotNull;
 @Schema(description = "Транспортный объект изменения товара")
 public class ProductUpdateDto {
 
+  @NotNull
   @Schema(description = "Заголовок товара")
   private String header;
 
+  @NotNull
   @Schema(description = "Цена товара")
   private int price;
 
+  @NotNull
   @Schema(description = "Описание товара")
   private String description;
 

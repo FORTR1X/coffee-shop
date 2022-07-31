@@ -5,6 +5,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import ru.shop.coffee.entity.Category;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -13,6 +15,7 @@ import ru.shop.coffee.entity.Category;
 @ToString
 public class SubcategoryUpdateDto {
 
+  @NotNull
   @Schema(description = "Заголовок подкатегории")
   private String title;
 
@@ -20,6 +23,7 @@ public class SubcategoryUpdateDto {
   @Schema(description = "ID категории подкатегории")
   private Category category;
 
+  @NotNull
   @Schema(description = "URL подкатегории")
   private String url;
 

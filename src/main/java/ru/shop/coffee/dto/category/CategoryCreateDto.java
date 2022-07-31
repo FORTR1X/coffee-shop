@@ -13,9 +13,11 @@ import javax.validation.constraints.NotNull;
 @ToString
 public class CategoryCreateDto {
 
+  @NotNull
   @Schema(description = "Название категории")
   private String title;
 
+  @NotNull
   @Schema(description = "URL адрес категории")
   private String url;
 
