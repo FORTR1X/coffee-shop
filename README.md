@@ -1,2 +1,2 @@
-# coffe-shop
-Online shop "DOZA кофеина"
+# coffe/tea-shop
+Front-end application coffee/tea shop "MARVELS"
