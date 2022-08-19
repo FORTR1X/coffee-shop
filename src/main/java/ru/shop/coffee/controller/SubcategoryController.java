@@ -16,6 +16,7 @@ import ru.shop.coffee.service.SubcategoryService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.PositiveOrZero;
+import java.util.List;
 
 @Controller
 @RequestMapping
@@ -39,7 +40,7 @@ public class SubcategoryController {
 
   @Operation(description = "Получение категории подкатегории")
   @GetMapping(
-          value = "/subcategory/id{id}/category/",
+          value = "/subcategory/id{id}/category",
           produces = {"application/json"})
   public ResponseEntity<CategoryDto> getCategoryBySubcatId(
           @Parameter(description = "ID подкатегории")
@@ -66,5 +67,13 @@ public class SubcategoryController {
           @Valid @PositiveOrZero @PathVariable("id") Integer id) {
     subcategoryService.deleteById(id);
     return ResponseEntity.noContent().build();
+  }
+
+  @Operation(description = "Получить полный список подкатегорий")
+  @GetMapping(
+          value = "/subcategories",
+          produces = {"application/json"})
+  public ResponseEntity<List<SubcategoryDto>> getSubcategiries() {
+    return ResponseEntity.ok(subcategoryService.getSubcategiries());
   }
 }

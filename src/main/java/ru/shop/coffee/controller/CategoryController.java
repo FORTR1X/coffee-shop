@@ -9,12 +9,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.shop.coffee.dto.CompanyCategoryDto;
 import ru.shop.coffee.dto.category.CategoryCreateDto;
 import ru.shop.coffee.dto.category.CategoryDto;
+import ru.shop.coffee.dto.subcategory.SubcategoryDto;
+import ru.shop.coffee.entity.CompanyCategory;
 import ru.shop.coffee.service.CategoryService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.PositiveOrZero;
+import java.util.List;
 
 @Controller
 @RequestMapping
@@ -63,5 +67,23 @@ public class CategoryController {
           @PositiveOrZero @Valid @PathVariable("id") Integer id) {
     categoryService.deleteById(id);
     return ResponseEntity.noContent().build();
+  }
+
+  @Operation(description = "Получение подкатегорий по ID категории")
+  @GetMapping(
+          value = "/category/id{id}/subcategories",
+          produces = {"application/json"})
+  public ResponseEntity<List<SubcategoryDto>> getSubcategoriesByCategoryId(
+          @Parameter(description = "ID категории")
+          @Valid @PositiveOrZero @PathVariable("id") Integer id) {
+    return ResponseEntity.ok(categoryService.getSubcategoriesByCategoryId(id));
+  }
+
+  @Operation(description = "Получение категорий с информацией о компании")
+  @GetMapping(
+          value = "/company-category",
+          produces = {"application/json"})
+  public ResponseEntity<Iterable<CompanyCategory>> getCompanyCategories() {
+    return ResponseEntity.ok(categoryService.getCompanyCategories());
   }
 }

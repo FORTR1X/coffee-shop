@@ -11,6 +11,10 @@ import ru.shop.coffee.mapper.CategoryMapper;
 import ru.shop.coffee.mapper.SubcategoryMapper;
 import ru.shop.coffee.repository.SubcategoryRepository;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class SubcategoryService {
@@ -43,5 +47,15 @@ public class SubcategoryService {
   public void deleteById(Integer id) {
     subcategoryRepository.findById(id).orElseThrow();
     subcategoryRepository.deleteById(id);
+  }
+
+  public List<SubcategoryDto> getSubcategiries() {
+    List<Subcategory> subcategoryList = new ArrayList<>();
+
+    Iterable<Subcategory> subcategories = subcategoryRepository.findAll();
+    for (Subcategory subcategory : subcategories) {
+      subcategoryList.add(subcategory);
+    }
+    return subcategoryMapper.subcategoriesToSubcategoriesDto(subcategoryList);
   }
 }

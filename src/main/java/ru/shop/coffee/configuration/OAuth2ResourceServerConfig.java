@@ -19,6 +19,7 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
     http
       .csrf().disable()
       .authorizeRequests()
+            .antMatchers("/").permitAll()
             .antMatchers(HttpMethod.GET,
                     "/oauth/**",
                     "/oauth/check_token/*",
@@ -27,10 +28,16 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
                     "/swagger-ui.html",
                     "/swagger-ui/**",
                     "/categories",
-                    "/category/*",
+                    "/category/**",
                     "/subcategory/**",
+                    "/subcategories",
                     "/product/*",
-                    "/products/*").permitAll()
+                    "/products/*",
+                    "/company-category",
+                    "/admin",
+                    "/user/*",
+                    "/uploads/product/*.jpg",
+                    "/best-sellers").permitAll()
             .antMatchers(HttpMethod.DELETE).authenticated()
             .antMatchers(HttpMethod.POST).authenticated()
             .antMatchers(HttpMethod.PUT).authenticated()

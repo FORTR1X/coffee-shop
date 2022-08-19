@@ -1,6 +1,7 @@
 package ru.shop.coffee.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -31,5 +32,10 @@ public class Product {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "subcategory_id")
   private Subcategory subcategory;
+
+  @JsonManagedReference
+  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JoinColumn(name = "id")
+  private BestSellers bestSellers;
 
 }

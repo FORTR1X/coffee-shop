@@ -1,14 +1,11 @@
 package ru.shop.coffee.dto.product;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.shop.coffee.entity.Subcategory;
-
-import javax.validation.constraints.NotNull;
+import ru.shop.coffee.dto.subcategory.SubcategoryDto;
 
 @Getter
 @Setter
@@ -29,8 +26,7 @@ public class ProductDto {
   @Schema(description = "Описание товара")
   private String description;
 
-  @JsonBackReference
   @Schema(description = "ID подкатегории")
-  private Subcategory subcategory;
+  private SubcategoryDto subcategory;
 
 }
