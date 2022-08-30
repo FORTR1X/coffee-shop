@@ -1,15 +1,19 @@
 package ru.shop.coffee.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.shop.coffee.dto.product.ProductCreateDto;
 import ru.shop.coffee.dto.product.ProductDto;
 import ru.shop.coffee.dto.product.ProductUpdateDto;
 import ru.shop.coffee.entity.Product;
+import ru.shop.coffee.entity.Subcategory;
 import ru.shop.coffee.mapper.ProductMapper;
 import ru.shop.coffee.repository.ProductRepository;
 import ru.shop.coffee.repository.SubcategoryRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,21 +28,21 @@ public class ProductService {
   private static final int DEFAULT_PAGE_LIMIT_SIZE = 10;
   private static final int DEFAULT_PAGE_SIZE = 0;
 
-  public List<ProductDto> getProductsBySubcatId(Integer subcatId, Integer limit, Integer page) {
+  private Sort getSortParam(String sort, String sortBy) {
+    if (sort.equals("asc")) return Sort.by(sortBy).ascending();
+    if (sort.equals("desc")) return Sort.by(sortBy).descending();
+    return Sort.by("id");
+  }
 
-    limit = limit == null ? DEFAULT_PAGE_LIMIT_SIZE : limit;
-    page = page == null ? DEFAULT_PAGE_SIZE : page;
+  public List<ProductDto> getProductsBySubId(Integer subId, Integer limit, Integer page, String sort) {
 
-    List<Product> productList = subcategoryRepository.findById(subcatId)
-            .orElseThrow()
-            .getProducts();
+    Subcategory subcategory = subcategoryRepository.findById(subId).orElseThrow();
 
-    if (productList.isEmpty()) return null;
+    List<Product> productList = productRepository.findAllBySubcategory(subcategory,
+            PageRequest.of(page == null ? DEFAULT_PAGE_SIZE : page, limit == null ? DEFAULT_PAGE_LIMIT_SIZE : limit,
+                    getSortParam(sort == null ? "id" : sort, "price")));
 
-    int fromIndex = Math.min(productList.size(), limit * page);
-    int toIndex = Math.min(productList.size(), fromIndex + limit);
-
-    return productMapper.productsToProductsDto(productList.subList(fromIndex, toIndex));
+    return productMapper.productsToProductsDto(productList);
   }
 
   public ProductDto create(ProductCreateDto request) {
@@ -69,5 +73,40 @@ public class ProductService {
 
     productRepository.deleteById(id);
 
+  }
+
+  public List<ProductDto> getProductsByIds(List<Integer> productsIdsList) {
+    List<Product> productList = new ArrayList<>();
+
+    productsIdsList.forEach(productRepository::findById);
+
+    productsIdsList.forEach(integer -> {
+      if (productRepository.findById(integer).isPresent())
+        productList.add(productRepository.findById(integer).orElseThrow());
+    });
+
+    return productMapper.productsToProductsDto(productList);
+  }
+
+  public Integer getCountProductsBySubcatId(Integer subcatId) {
+    Subcategory subcategory = subcategoryRepository.findById(subcatId).orElseThrow();
+
+    return productRepository.findAllBySubcategory(subcategory).size();
+  }
+
+  public List<ProductDto> getProductsBySubcatIdAndPriceBetween(Integer subcatId, Integer priceFrom,
+                                                               Integer priceTo, Integer limit,
+                                                               Integer page, String sort) {
+
+    Subcategory subcategory = subcategoryRepository.findById(subcatId).orElseThrow();
+
+    List<Product> productList = productRepository.findAllBySubcategoryAndPriceBetween(
+            subcategory,
+            priceFrom == null ? 0 : priceFrom,
+            priceTo == null ? 99999 : priceTo,
+            PageRequest.of(page == null ? DEFAULT_PAGE_SIZE : page, limit == null ? DEFAULT_PAGE_LIMIT_SIZE : limit,
+                    getSortParam(sort == null ? "id" : sort, "price")));
+
+    return productMapper.productsToProductsDto(productList);
   }
 }

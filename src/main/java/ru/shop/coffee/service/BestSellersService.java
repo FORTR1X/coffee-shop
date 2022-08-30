@@ -18,11 +18,6 @@ public class BestSellersService {
   private final BestSellersMapper bestSellersMapper;
 
   public List<BestSellersDto> getAllBestSellers() {
-//    List<BestSellers>
-//    Iterable<BestSellers> bestSellersIterable = bestSellersRepository.findAll();
-//    for (BestSellers bestSellers : bestSellersIterable) {
-//
-//    }
     return bestSellersMapper.bestSellersToBestSellersDto(bestSellersRepository.findAll());
   }
 }

@@ -32,12 +32,13 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
                     "/subcategory/**",
                     "/subcategories",
                     "/product/*",
-                    "/products/*",
+                    "/products/**",
                     "/company-category",
                     "/admin",
                     "/user/*",
-                    "/uploads/product/*.jpg",
-                    "/best-sellers").permitAll()
+                    "/uploads/**/*.jpg",
+                    "/best-sellers",
+                    "/products-by-ids").permitAll()
             .antMatchers(HttpMethod.DELETE).authenticated()
             .antMatchers(HttpMethod.POST).authenticated()
             .antMatchers(HttpMethod.PUT).authenticated()

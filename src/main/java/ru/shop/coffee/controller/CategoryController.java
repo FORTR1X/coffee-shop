@@ -54,7 +54,7 @@ public class CategoryController {
   @GetMapping(
           value = "/categories",
           produces = {"application/json"})
-  public ResponseEntity<Iterable<CategoryDto>> getAllCategories() {
+  public ResponseEntity<List<CategoryDto>> getAllCategories() {
     return ResponseEntity.ok(categoryService.getAllCategories());
   }
 

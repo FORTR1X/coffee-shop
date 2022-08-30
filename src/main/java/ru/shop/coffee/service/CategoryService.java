@@ -13,6 +13,7 @@ import ru.shop.coffee.mapper.SubcategoryMapper;
 import ru.shop.coffee.repository.CategoryRepository;
 import ru.shop.coffee.repository.CompanyCategoryRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -38,8 +39,14 @@ public class CategoryService {
     return categoryMapper.categoryToCategoryDto(categoryRepository.findById(id).orElseThrow());
   }
 
-  public Iterable<CategoryDto> getAllCategories() {
-    return categoryMapper.categoryListToCategoryListDto(categoryRepository.findAll());
+  public List<CategoryDto> getAllCategories() {
+    Iterable<Category> categoryDtos = categoryRepository.findAll();
+    List<Category> categoryList = new ArrayList<>();
+    for (Category category : categoryDtos) {
+      categoryList.add(category);
+    }
+
+    return categoryMapper.categoryListToCategoryListDto(categoryList);
   }
 
   public void deleteById(Integer id) {

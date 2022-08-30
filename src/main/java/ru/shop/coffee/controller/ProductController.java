@@ -42,16 +42,35 @@ public class ProductController {
 
   @Operation(description = "Получение списка товара по id подкатегории")
   @GetMapping(
-          value = "/products/subcatId{subcatId}",
+          value = "/products/subcat-id{subcatId}",
           produces = {"application/json"})
   public ResponseEntity<List<ProductDto>> getProductsBySubcatId(
           @Parameter(description = "ID подкатегории")
           @PositiveOrZero @Valid @PathVariable("subcatId") Integer subcatId,
+          @Parameter(description = "Цена поиска от")
+          @PositiveOrZero @Valid @RequestParam(value = "price-from", required = false) Integer priceFrom,
+          @Parameter(description = "Цена поиска до")
+          @PositiveOrZero @Valid @RequestParam(value = "price-to", required = false) Integer priceTo,
           @Parameter(description = "Количество получаемого товара на странице")
           @Min(1) @Max(10) @RequestParam(value = "limit", required = false) Integer limit,
           @Parameter(description = "Номер страницы")
-          @Min(0) @Max(20) @RequestParam(value = "page", required = false) Integer page) {
-    return ResponseEntity.ok(productService.getProductsBySubcatId(subcatId, limit, page));
+          @Min(0) @Max(20) @RequestParam(value = "page", required = false) Integer page,
+          @Parameter(description = "Тип сортировки")
+          @RequestParam(value = "sort", required = false) String sort) {
+    if (priceFrom != null || priceTo != null)
+      return ResponseEntity.ok(productService.getProductsBySubcatIdAndPriceBetween(subcatId, priceFrom, priceTo, limit, page, sort));
+
+    return ResponseEntity.ok(productService.getProductsBySubId(subcatId, limit, page, sort));
+  }
+
+  @Operation(description = "Получение количества товара по id подкатегории")
+  @GetMapping(
+          value = "/products/subcat-id{subcatId}/count",
+          produces = {"application/json"})
+  public ResponseEntity<Integer> getCountProductsBySubcatId(
+          @Parameter(description = "ID подкатегории")
+          @PositiveOrZero @Valid @PathVariable("subcatId") Integer subcatId) {
+    return ResponseEntity.ok(productService.getCountProductsBySubcatId(subcatId));
   }
 
   @Operation(description = "Получение товара по его ID")
