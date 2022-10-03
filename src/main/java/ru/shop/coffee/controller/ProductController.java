@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.shop.coffee.dto.product.ProductCreateDto;
 import ru.shop.coffee.dto.product.ProductDto;
 import ru.shop.coffee.dto.product.ProductUpdateDto;
@@ -18,6 +19,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.PositiveOrZero;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -42,22 +44,22 @@ public class ProductController {
 
   @Operation(description = "Получение списка товара по id подкатегории")
   @GetMapping(
-          value = "/products/subcat-id{subcatId}",
+          value = "/products",
           produces = {"application/json"})
   public ResponseEntity<List<ProductDto>> getProductsBySubcatId(
           @Parameter(description = "ID подкатегории")
-          @PositiveOrZero @Valid @PathVariable("subcatId") Integer subcatId,
+          @Valid @RequestParam("subcatId") String subcatId,
           @Parameter(description = "Цена поиска от")
-          @PositiveOrZero @Valid @RequestParam(value = "price-from", required = false) Integer priceFrom,
+          @Valid @RequestParam(value = "price-from", required = false) String priceFrom,
           @Parameter(description = "Цена поиска до")
-          @PositiveOrZero @Valid @RequestParam(value = "price-to", required = false) Integer priceTo,
+          @Valid @RequestParam(value = "price-to", required = false) String priceTo,
           @Parameter(description = "Количество получаемого товара на странице")
-          @Min(1) @Max(10) @RequestParam(value = "limit", required = false) Integer limit,
+          @Min(1) @Max(20) @RequestParam(value = "limit", required = false) String limit,
           @Parameter(description = "Номер страницы")
-          @Min(0) @Max(20) @RequestParam(value = "page", required = false) Integer page,
+          @Min(0) @Max(20) @RequestParam(value = "page", required = false) String page,
           @Parameter(description = "Тип сортировки")
           @RequestParam(value = "sort", required = false) String sort) {
-    if (priceFrom != null || priceTo != null)
+    if (priceFrom.length() > 0 || priceTo.length() > 0)
       return ResponseEntity.ok(productService.getProductsBySubcatIdAndPriceBetween(subcatId, priceFrom, priceTo, limit, page, sort));
 
     return ResponseEntity.ok(productService.getProductsBySubId(subcatId, limit, page, sort));
@@ -106,4 +108,58 @@ public class ProductController {
     productService.deleteById(id);
     return ResponseEntity.noContent().build();
   }
+
+  @Operation(description = "Получение товаров корзины по ID")
+  @GetMapping(
+          value = "/products-by-ids",
+          produces = {"application/json"})
+  public ResponseEntity<List<ProductDto>> getProductsByIds(
+          @Parameter(description = "Список ID товаров")
+          @Valid @RequestParam(value = "id") List<Integer> integerList) {
+    return ResponseEntity.ok(productService.getProductsByIds(integerList));
+  }
+
+  @Operation(description = "Поиск по названию и описанию")
+  @GetMapping(
+          value = "/search",
+          produces = {"application/json"})
+  public ResponseEntity<List<ProductDto>> getProductsByRequest(
+          @Parameter(description = "Поисковой запрос")
+          @RequestParam(value = "q") String request) {
+    return ResponseEntity.ok(productService.getProductsByRequest(request));
+  }
+
+  @Operation(description = "Получение всего списка товаров")
+  @GetMapping(
+          value = "/all-products",
+          produces = {"application/json"})
+  public ResponseEntity<List<ProductDto>> getAllProducts() {
+    return ResponseEntity.ok(productService.getAllProducts());
+  }
+
+  @Operation(description = "Удаление товаров по списку id")
+  @DeleteMapping(
+          value = "/products",
+          produces = {"application/json"})
+  public ResponseEntity<Void> deleteProductsById (
+          @Parameter(description = "Список id")
+          @Valid @RequestParam(value = "id") List<Integer> ids) {
+    productService.deleteAllById(ids);
+    return ResponseEntity.noContent().build();
+  }
+
+  @Operation(description = "Добавление изображений товара")
+  @PostMapping(
+          value = "/upload/images{id}",
+          produces = {"application/json"})
+  public ResponseEntity<Void> uploadImages (
+          @Parameter(description = "ID продукта, которому создаются изображения")
+          @PositiveOrZero @Valid @PathVariable("id") Integer id,
+          @Parameter(description = "Список изображений")
+          @RequestParam("img") MultipartFile[] files) {
+
+    productService.uploadImages(files, id);
+    return ResponseEntity.noContent().build();
+  }
+
 }

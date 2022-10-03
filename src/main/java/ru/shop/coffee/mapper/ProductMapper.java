@@ -15,6 +15,7 @@ import static org.mapstruct.ReportingPolicy.IGNORE;
 public interface ProductMapper {
 
   List<ProductDto> productsToProductsDto(List<Product> productList);
+  List<Product> productsDtoToProducts(List<ProductDto> productDtoList);
   ProductDto toProductDto(Product product);
   Product productCreateDtoToProduct(ProductCreateDto productCreateDto);
   Product productUpdateRequestToProductView(Integer id, ProductUpdateDto productUpdateDto);

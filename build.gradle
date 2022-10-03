@@ -45,6 +45,8 @@ dependencies {
 	annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0"
 	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 	annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '1.2.0.RELEASE'
 }
 
 tasks.named('test') {

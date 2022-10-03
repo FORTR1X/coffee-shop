@@ -3,7 +3,6 @@ package ru.shop.coffee.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.shop.coffee.dto.bestSellers.BestSellersDto;
-import ru.shop.coffee.entity.BestSellers;
 import ru.shop.coffee.mapper.BestSellersMapper;
 import ru.shop.coffee.repository.BestSellersRepository;
 

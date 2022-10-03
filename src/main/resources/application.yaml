@@ -12,7 +12,7 @@ spring:
     baselineOnMigrate: true
     enabled: true
   application:
-      name: DOZA_coffeine
+      name: MARVELS_SHOP
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/DOZAshop?currentSchema=public
@@ -20,6 +20,21 @@ spring:
     password: password
   jpa.hibernate.ddl-auto: none
   jpa.database-platform: org.hibernate.dialect.PostgreSQLDialect
+  mail:
+    host: smtp.mail.ru
+    port: 465
+    username: marvels-order@mail.ru
+    password: UfZ75f8f5rxs7HYYyZ67
+    protocol: smtps
+    properties:
+      mail:
+        debug: false
+        starttls:
+          enable: true
+        smtp:
+          auth: true
+        transport:
+          protocol: smtps
 
 secure:
   signingKey: sign_key_for_jwt
