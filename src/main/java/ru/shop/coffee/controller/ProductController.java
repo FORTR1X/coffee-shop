@@ -162,4 +162,14 @@ public class ProductController {
     return ResponseEntity.noContent().build();
   }
 
+  @Operation(description = "Получить список изображений товара")
+  @GetMapping(
+          value = "/upload/product/images-title{id}",
+          produces = {"application/json"})
+  public ResponseEntity<List<String>> getImagesNameById(
+          @Parameter(description = "ID продукта, которому создаются изображения")
+          @PositiveOrZero @Valid @PathVariable("id") Integer id) {
+    return ResponseEntity.ok(productService.getImagesProductById(id));
+  }
+
 }

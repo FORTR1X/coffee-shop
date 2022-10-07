@@ -21,8 +21,7 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
       .authorizeRequests()
             .antMatchers("/").permitAll()
             .antMatchers(HttpMethod.POST,
-                    "/order-confirm",
-                    "/upload/images*").permitAll()
+                    "/order-confirm").permitAll()
             .antMatchers(HttpMethod.GET,
                     "/oauth/**",
                     "/oauth/check_token/*",
@@ -44,7 +43,8 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
                     "/uploads/oferta.pdf",
                     "/best-sellers",
                     "/products-by-ids",
-                    "/search**").permitAll()
+                    "/search**",
+                    "/upload/product/images-title*").permitAll()
             .antMatchers(HttpMethod.DELETE).authenticated()
             .antMatchers(HttpMethod.POST).authenticated()
             .antMatchers(HttpMethod.PUT).authenticated()
