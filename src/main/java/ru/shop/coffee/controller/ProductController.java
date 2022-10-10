@@ -172,4 +172,17 @@ public class ProductController {
     return ResponseEntity.ok(productService.getImagesProductById(id));
   }
 
+
+  @Operation(description = "Обновление изображений товара")
+  @PutMapping(
+          value = "/upload/images{id}",
+          produces = {"application/json"})
+  public ResponseEntity<Void> updateProductImagesById (
+          @Parameter(description = "ID редактируемого товара")
+          @PositiveOrZero @Valid @PathVariable("id") Integer id,
+          @Parameter(description = "Список изображений")
+          @RequestParam("img") MultipartFile[] files) {
+    productService.updateProductImagesById(id, files);
+    return ResponseEntity.noContent().build();
+  }
 }

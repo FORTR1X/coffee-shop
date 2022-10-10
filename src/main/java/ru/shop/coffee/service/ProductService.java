@@ -17,8 +17,10 @@ import ru.shop.coffee.mapper.ProductMapper;
 import ru.shop.coffee.repository.ProductRepository;
 import ru.shop.coffee.repository.SubcategoryRepository;
 
+import javax.mail.FolderNotFoundException;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -145,25 +147,43 @@ public class ProductService {
     return productMapper.productsToProductsDto(productList);
   }
 
-
-
-  public void uploadImages(MultipartFile[] files, Integer id) {
-    final String PRODUCT_DIR = UPLOADS_ABSOLUTE_PATH + "\\product\\" + id;
-    try {
-      makeDirectoryIfNotExist(PRODUCT_DIR);
-
-      for (int i = 0; i < files.length; i++) {
-        Path productDirPath = Paths.get(PRODUCT_DIR + "\\" + i + ".jpg");
-        Files.write(productDirPath, files[i].getBytes());
-      }
-    } catch (Exception e) { System.out.println(e.toString()); }
-  }
-
   private void makeDirectoryIfNotExist(String imageDirectory) {
     File directory = new File(imageDirectory);
     if (!directory.exists()) {
       directory.mkdir();
     }
+  }
+
+  private void deleteImagesByDirectory(File directory) {
+    try {
+      File[] currentImages = directory.listFiles();
+      if (currentImages != null && currentImages.length > 0) {
+        for (File image : currentImages) {
+          image.delete();
+        }
+      }
+    } catch (Exception e) {
+      System.out.println(e.toString());
+    }
+  }
+
+  private void writeProductImages(String productDir, MultipartFile[] files) {
+    try {
+      for (int i = 0; i < files.length; i++) {
+        Path productDirPath = Paths.get(productDir + "\\" + i + ".jpg");
+        Files.write(productDirPath, files[i].getBytes());
+      }
+    } catch (IOException e) {
+      System.out.println(e.getMessage());
+    }
+  }
+
+  public void uploadImages(MultipartFile[] files, Integer id) {
+    final String PRODUCT_DIR = UPLOADS_ABSOLUTE_PATH + "\\product\\" + id;
+    try {
+      makeDirectoryIfNotExist(PRODUCT_DIR);
+      writeProductImages(PRODUCT_DIR, files);
+    } catch (Exception e) { System.out.println(e.toString()); }
   }
 
   public List<String> getImagesProductById(Integer id) {
@@ -186,6 +206,21 @@ public class ProductService {
 
     return null;
   }
+
+  public void updateProductImagesById(Integer id, MultipartFile[] files) {
+    final String PRODUCT_DIR = UPLOADS_ABSOLUTE_PATH + "\\product\\" + id;
+    try {
+      File directory = new File(PRODUCT_DIR);
+
+      makeDirectoryIfNotExist(PRODUCT_DIR);
+      deleteImagesByDirectory(directory);
+      writeProductImages(PRODUCT_DIR, files);
+
+    } catch (Exception e) {
+      System.out.println(e.toString());
+    }
+  }
+
 }
 
 // git commit -m "Product: optimize method getProductsBySubcatId, added sort, pagination, find by price for this method"
