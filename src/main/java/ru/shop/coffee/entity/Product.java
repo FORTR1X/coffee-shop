@@ -34,7 +34,7 @@ public class Product {
   private Subcategory subcategory;
 
   @JsonManagedReference
-  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "id")
   private BestSellers bestSellers;
 

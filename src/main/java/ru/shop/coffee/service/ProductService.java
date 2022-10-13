@@ -196,7 +196,7 @@ public class ProductService {
 
       List<String> urlPathImages = new ArrayList<>();
       for (File image : imageListFiles) {
-        urlPathImages.add(image.getName());
+        urlPathImages.add("/uploads/product/" + id + "/" + image.getName());
       }
 
       return urlPathImages;

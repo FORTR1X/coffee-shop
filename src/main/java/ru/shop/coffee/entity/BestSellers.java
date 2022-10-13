@@ -17,7 +17,6 @@ import javax.persistence.*;
 public class BestSellers {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
   private Integer id;
 
   @JsonBackReference
