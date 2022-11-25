@@ -17,7 +17,7 @@ import javax.validation.constraints.Email;
 public class Users {
 
   @Id
-  @GeneratedValue(strategy= GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
   // Имя пользователя
@@ -30,7 +30,7 @@ public class Users {
   private String email;
 
   // Номер телефона пользователя
-  @Column(name = "phoneNumber", nullable = false)
+  @Column(name = "phone_number", nullable = false)
   private String phoneNumber;
 
   // Пароль пользователя

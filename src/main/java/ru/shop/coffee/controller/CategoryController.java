@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.shop.coffee.dto.CompanyCategoryDto;
 import ru.shop.coffee.dto.category.CategoryCreateDto;
 import ru.shop.coffee.dto.category.CategoryDto;
 import ru.shop.coffee.dto.subcategory.SubcategoryDto;

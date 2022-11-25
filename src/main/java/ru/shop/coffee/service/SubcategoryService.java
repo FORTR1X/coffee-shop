@@ -12,7 +12,6 @@ import ru.shop.coffee.mapper.SubcategoryMapper;
 import ru.shop.coffee.repository.SubcategoryRepository;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 @Service

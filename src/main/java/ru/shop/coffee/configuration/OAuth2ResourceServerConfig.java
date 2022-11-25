@@ -13,12 +13,14 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 @EnableResourceServer
 public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
-  /** Конфигурация endpoint`ов по доступу к ресурсам */
+  /**
+   * Конфигурация endpoint`ов по доступу к ресурсам
+   */
   @Override
   public void configure(HttpSecurity http) throws Exception {
     http
-      .csrf().disable()
-      .authorizeRequests()
+            .csrf().disable()
+            .authorizeRequests()
             .antMatchers("/").permitAll()
             .antMatchers(HttpMethod.POST,
                     "/order-confirm").permitAll()
@@ -40,16 +42,17 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
                     "/user/*",
                     "/uploads/**/*.jpg",
                     "/uploads/**/*.png",
-                    "/uploads/oferta.pdf",
+                    "/uploads/**.pdf",
                     "/best-sellers",
                     "/products-by-ids",
                     "/search**",
-                    "/upload/product/images-title*").permitAll()
+                    "/upload/product/images-title*",
+                    "/stocks").permitAll()
             .antMatchers(HttpMethod.DELETE).authenticated()
             .antMatchers(HttpMethod.POST).authenticated()
             .antMatchers(HttpMethod.PUT).authenticated()
             .anyRequest().authenticated()
-        .and()
+            .and()
             .rememberMe().key("uniqueAndSecret");
   }
 }

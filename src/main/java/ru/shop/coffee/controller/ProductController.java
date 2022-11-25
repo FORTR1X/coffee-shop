@@ -19,7 +19,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.PositiveOrZero;
-import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -141,7 +140,7 @@ public class ProductController {
   @DeleteMapping(
           value = "/products",
           produces = {"application/json"})
-  public ResponseEntity<Void> deleteProductsById (
+  public ResponseEntity<Void> deleteProductsById(
           @Parameter(description = "Список id")
           @Valid @RequestParam(value = "id") List<Integer> ids) {
     productService.deleteAllById(ids);
@@ -152,7 +151,7 @@ public class ProductController {
   @PostMapping(
           value = "/upload/images{id}",
           produces = {"application/json"})
-  public ResponseEntity<Void> uploadImages (
+  public ResponseEntity<Void> uploadImages(
           @Parameter(description = "ID продукта, которому создаются изображения")
           @PositiveOrZero @Valid @PathVariable("id") Integer id,
           @Parameter(description = "Список изображений")
@@ -177,7 +176,7 @@ public class ProductController {
   @PutMapping(
           value = "/upload/images{id}",
           produces = {"application/json"})
-  public ResponseEntity<Void> updateProductImagesById (
+  public ResponseEntity<Void> updateProductImagesById(
           @Parameter(description = "ID редактируемого товара")
           @PositiveOrZero @Valid @PathVariable("id") Integer id,
           @Parameter(description = "Список изображений")

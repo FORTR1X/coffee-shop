@@ -36,24 +36,45 @@ public class StockController {
   @PostMapping(
           value = "/stock/id{id}",
           produces = {"application/json"})
-  public ResponseEntity<Void> addPhotoStock(
+  public ResponseEntity<List<String>> addPhotoStock(
           @Parameter(description = "ID акционного товара")
           @Valid @PositiveOrZero @PathVariable("id") Integer id,
           @Parameter(description = "Изображение акции")
           @RequestParam("img") MultipartFile file) {
-    stockService.addPhotoStock(id, file);
-    return ResponseEntity.noContent().build();
+    return ResponseEntity.ok(stockService.addPhotoStock(id, file));
   }
 
   @Operation(description = "Удалить фотографию акции")
   @DeleteMapping(
           value = "/stock/id{id}",
           produces = {"application/json"})
-  public ResponseEntity<Void> deletePhotoStock(
+  public ResponseEntity<List<String>> deletePhotoStock(
           @Parameter(description = "ID акционного товара")
           @Valid @PositiveOrZero @PathVariable("id") Integer id) {
-    stockService.deletePhotoStock(id);
-    return ResponseEntity.noContent().build();
+    return ResponseEntity.ok(stockService.deletePhotoStock(id));
   }
 
+  @Operation(description = "Изменить id акции")
+  @PutMapping(
+          value = "/stock/prev-id{prevId}/new-id{newId}",
+          produces = {"application/json"})
+  public ResponseEntity<List<String>> editIdStock(
+          @Parameter(description = "Предыдущее ID акции")
+          @Valid @PositiveOrZero @PathVariable("prevId") Integer prevId,
+          @Parameter(description = "Новый ID акции")
+          @Valid @PositiveOrZero @PathVariable("newId") Integer newId) {
+    return ResponseEntity.ok(stockService.editIdStock(prevId, newId));
+  }
+
+  @Operation(description = "Изменить фото акции")
+  @PutMapping(
+          value = "/stock/id{id}",
+          produces = {"application/json"})
+  public ResponseEntity<List<String>> editPhotoStock(
+          @Parameter(description = "ID изменяемой акции")
+          @Valid @PositiveOrZero @PathVariable("id") Integer id,
+          @Parameter(description = "Изображение акции")
+          @RequestParam("img") MultipartFile file) {
+    return ResponseEntity.ok(stockService.editPhotoStock(id, file));
+  }
 }

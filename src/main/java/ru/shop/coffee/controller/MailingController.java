@@ -31,7 +31,7 @@ public class MailingController {
           consumes = {"application/json"})
   public ResponseEntity<Void> createOrderMail(
           @Parameter(description = "Структура данных заказа")
-          @Valid  @RequestBody OrderDto orderDto) {
+          @Valid @RequestBody OrderDto orderDto) {
 
     mailingService.createOrderMail(orderDto);
     return ResponseEntity.noContent().build();

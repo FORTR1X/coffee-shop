@@ -26,35 +26,45 @@ import javax.sql.DataSource;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class GlobalSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    /** Драйвер к БД */
-    @Autowired
-    private DataSource dataSource;
+  /**
+   * Драйвер к БД
+   */
+  @Autowired
+  private DataSource dataSource;
 
-    private BCryptPasswordEncoder passwordEncoder;
+  private BCryptPasswordEncoder passwordEncoder;
 
-    /** Менеджер аутентификации */
-    @Override
-    @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
+  /**
+   * Менеджер аутентификации
+   */
+  @Override
+  @Bean
+  public AuthenticationManager authenticationManagerBean() throws Exception {
+    return super.authenticationManagerBean();
+  }
 
-    /** Сервис пользователей. */
-    @Bean
-    @Override
-    protected UserDetailsService userDetailsService() {
-        return new JdbcUserDetailsManager(this.dataSource);
-    }
+  /**
+   * Сервис пользователей.
+   */
+  @Bean
+  @Override
+  protected UserDetailsService userDetailsService() {
+    return new JdbcUserDetailsManager(this.dataSource);
+  }
 
-    /** Глобальная конфигурация защиты endpoint`ов */
-    @Override
-    protected void configure(HttpSecurity http) {
-        // Отключаем глобальный фильтр Security -> Используем фильтр Resource Server
-    }
+  /**
+   * Глобальная конфигурация защиты endpoint`ов
+   */
+  @Override
+  protected void configure(HttpSecurity http) {
+    // Отключаем глобальный фильтр Security -> Используем фильтр Resource Server
+  }
 
-    /** Конфигурация менеджера по аутентификации */
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService());
-    }
+  /**
+   * Конфигурация менеджера по аутентификации
+   */
+  @Override
+  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    auth.userDetailsService(userDetailsService());
+  }
 }

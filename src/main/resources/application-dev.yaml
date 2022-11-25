@@ -1,13 +1,13 @@
 server:
   port: ${PORT_TO_EXPOSE:8080}
 
-upload:
-  path: /root/uploads
-
 logging:
   level:
     ROOT: INFO
     org.springframework: INFO
+
+upload:
+  path: C:\Users\FORTRIX\Desktop\coffee_shop\uploads
 
 spring:
   flyway:

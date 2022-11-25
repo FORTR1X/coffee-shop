@@ -27,73 +27,93 @@ import javax.sql.DataSource;
 @EnableAuthorizationServer
 public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
-    /** Менеджер аутентификации */
-    @Autowired
-    private AuthenticationManager authenticationManager;
+  /**
+   * Менеджер аутентификации
+   */
+  @Autowired
+  private AuthenticationManager authenticationManager;
 
-    /** Драйвер к БД */
-    @Autowired
-    private DataSource dataSource;
+  /**
+   * Драйвер к БД
+   */
+  @Autowired
+  private DataSource dataSource;
 
-    /** Ключ для симметричного шифрования JWT токена */
-    @Value("${secure.signingKey}")
-    private String signingKey;
+  /**
+   * Ключ для симметричного шифрования JWT токена
+   */
+  @Value("${secure.signingKey}")
+  private String signingKey;
 
 
-    /** Конфигурация модулей auth сервиса */
-    @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
-        JwtAccessTokenConverter jwtAccessTokenConverter = accessTokenConverter();
-        endpoints
-                .tokenStore(new JwtTokenStore(jwtAccessTokenConverter))
-                .accessTokenConverter(jwtAccessTokenConverter)
-                .authenticationManager(authenticationManager);
-    }
+  /**
+   * Конфигурация модулей auth сервиса
+   */
+  @Override
+  public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
+    JwtAccessTokenConverter jwtAccessTokenConverter = accessTokenConverter();
+    endpoints
+            .tokenStore(new JwtTokenStore(jwtAccessTokenConverter))
+            .accessTokenConverter(jwtAccessTokenConverter)
+            .authenticationManager(authenticationManager);
+  }
 
-    /** Конфигурация security auth сервиса */
-    @Override
-    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-        security.allowFormAuthenticationForClients();
-        security.checkTokenAccess("permitAll()");
-    }
+  /**
+   * Конфигурация security auth сервиса
+   */
+  @Override
+  public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
+    security.allowFormAuthenticationForClients();
+    security.checkTokenAccess("permitAll()");
+  }
 
-    /** Конфигурация клиентов auth сервиса. */
-    @Override
-    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.jdbc(dataSource).passwordEncoder(passwordEncoder());
-    }
+  /**
+   * Конфигурация клиентов auth сервиса.
+   */
+  @Override
+  public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+    clients.jdbc(dataSource).passwordEncoder(passwordEncoder());
+  }
 
-    /** Бин для шифрования паролей пользователей */
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+  /**
+   * Бин для шифрования паролей пользователей
+   */
+  @Bean
+  public BCryptPasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 
-    /** Кастомный сервис по работе с oauth токенами */
-    @Bean
-    @Primary
-    public DefaultTokenServices tokenServices() {
-        final DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
-        defaultTokenServices.setTokenStore(tokenStore());
-        defaultTokenServices.setSupportRefreshToken(true);
+  /**
+   * Кастомный сервис по работе с oauth токенами
+   */
+  @Bean
+  @Primary
+  public DefaultTokenServices tokenServices() {
+    final DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
+    defaultTokenServices.setTokenStore(tokenStore());
+    defaultTokenServices.setSupportRefreshToken(true);
 
-        return defaultTokenServices;
-    }
+    return defaultTokenServices;
+  }
 
-    /** Кастомное хранилище oauth токенов */
-    @Bean
-    public TokenStore tokenStore() {
-        return new JwtTokenStore(accessTokenConverter());
-    }
+  /**
+   * Кастомное хранилище oauth токенов
+   */
+  @Bean
+  public TokenStore tokenStore() {
+    return new JwtTokenStore(accessTokenConverter());
+  }
 
-    /** Кастомный конвертер oauth токенов */
-    @Bean
-    public JwtAccessTokenConverter accessTokenConverter() {
-        final JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+  /**
+   * Кастомный конвертер oauth токенов
+   */
+  @Bean
+  public JwtAccessTokenConverter accessTokenConverter() {
+    final JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
 
-        DefaultAccessTokenConverter accessTokenConverter = new DefaultAccessTokenConverter();
-        converter.setAccessTokenConverter(accessTokenConverter);
-        converter.setSigningKey(signingKey);
-        return converter;
-    }
+    DefaultAccessTokenConverter accessTokenConverter = new DefaultAccessTokenConverter();
+    converter.setAccessTokenConverter(accessTokenConverter);
+    converter.setSigningKey(signingKey);
+    return converter;
+  }
 }

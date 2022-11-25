@@ -1,17 +1,14 @@
 package ru.shop.coffee.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import ru.shop.coffee.dto.bestSellers.BestSellersDto;
 import ru.shop.coffee.entity.BestSellers;
-import ru.shop.coffee.entity.Product;
 import ru.shop.coffee.exception.ReachedMaximumNumberOfGoods;
 import ru.shop.coffee.mapper.BestSellersMapper;
 import ru.shop.coffee.repository.BestSellersRepository;
 import ru.shop.coffee.repository.ProductRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,7 +25,9 @@ public class BestSellersService {
   }
 
   public List<BestSellersDto> deleteById(Integer id) {
-    bestSellersRepository.deleteById(id);
+    if (bestSellersRepository.findById(id).isPresent())
+      bestSellersRepository.deleteById(id);
+
     return bestSellersMapper.bestSellersToBestSellersDto(bestSellersRepository.findAll());
   }
 

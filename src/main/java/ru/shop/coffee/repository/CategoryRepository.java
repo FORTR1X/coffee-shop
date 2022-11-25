@@ -6,5 +6,4 @@ import ru.shop.coffee.entity.Category;
 public interface CategoryRepository extends PagingAndSortingRepository<Category, Integer> {
 
 
-
 }

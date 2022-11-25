@@ -2,7 +2,6 @@ package ru.shop.coffee.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.shop.coffee.dto.CompanyCategoryDto;
 import ru.shop.coffee.dto.category.CategoryCreateDto;
 import ru.shop.coffee.dto.category.CategoryDto;
 import ru.shop.coffee.dto.subcategory.SubcategoryDto;

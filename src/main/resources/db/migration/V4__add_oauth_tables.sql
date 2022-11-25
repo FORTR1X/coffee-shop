@@ -1,28 +1,32 @@
 CREATE TABLE users
 (
-    id INTEGER NOT NULL CONSTRAINT users_id_pkey PRIMARY KEY,
-    username VARCHAR(50) NOT NULL CONSTRAINT users_username_key UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    email VARCHAR(100) NOT NULL,
-    phone_number VARCHAR(32) NOT NULL,
-    enabled BOOLEAN NOT NULL
+    id           INTEGER      NOT NULL
+        CONSTRAINT users_id_pkey PRIMARY KEY,
+    username     VARCHAR(50)  NOT NULL
+        CONSTRAINT users_username_key UNIQUE,
+    password     VARCHAR(255) NOT NULL,
+    email        VARCHAR(100) NOT NULL,
+    phone_number VARCHAR(32)  NOT NULL,
+    enabled      BOOLEAN      NOT NULL
 );
 
-CREATE TABLE authorities (
-    username VARCHAR(50) NOT NULL,
+CREATE TABLE authorities
+(
+    username  VARCHAR(50) NOT NULL,
     authority varchar(50) NOT NULL,
-    CONSTRAINT fk_authorities_users FOREIGN KEY (username) REFERENCES users(username)
+    CONSTRAINT fk_authorities_users FOREIGN KEY (username) REFERENCES users (username)
 );
-CREATE UNIQUE INDEX ix_auth_username ON authorities (username,authority);
+CREATE UNIQUE INDEX ix_auth_username ON authorities (username, authority);
 
 CREATE TABLE oauth_client_details
 (
-    client_id               VARCHAR(255) NOT NULL CONSTRAINT oauth_client_details_client_id_pkey PRIMARY KEY,
+    client_id               VARCHAR(255) NOT NULL
+        CONSTRAINT oauth_client_details_client_id_pkey PRIMARY KEY,
     access_token_validity   INTEGER,
     additional_information  VARCHAR(255),
     authorities             VARCHAR(255),
     authorized_grant_types  VARCHAR(255),
-    autoapprove             BOOLEAN NOT NULL,
+    autoapprove             BOOLEAN      NOT NULL,
     client_secret           VARCHAR(255),
     refresh_token_validity  INTEGER,
     resource_ids            VARCHAR(255),
@@ -52,5 +56,8 @@ VALUES ('coffee-client', -- client-id
         null,
         true);
 
-INSERT INTO users (id, username, email, phone_number, password, enabled) VALUES (1, 'admin', 'mrrovergame@gmail.ru', '+7 (978)-750-32-36', '$2a$10$oUcsyGINmYCvnsNPHa1Qme7ca764qCGjGnao3R3mBVfIxwkwNoZH.', true);
-INSERT INTO authorities (username, authority) VALUES ('admin', 'ADMIN');
+INSERT INTO users (id, username, email, phone_number, password, enabled)
+VALUES (1, 'admin', 'mrrovergame@gmail.ru', '+7 (978)-750-32-36',
+        '$2a$10$oUcsyGINmYCvnsNPHa1Qme7ca764qCGjGnao3R3mBVfIxwkwNoZH.', true);
+INSERT INTO authorities (username, authority)
+VALUES ('admin', 'ADMIN');

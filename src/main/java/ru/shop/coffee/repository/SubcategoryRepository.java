@@ -4,11 +4,9 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import ru.shop.coffee.entity.Category;
 import ru.shop.coffee.entity.Subcategory;
 
-import java.util.List;
-
 public interface SubcategoryRepository extends PagingAndSortingRepository<Subcategory, Integer> {
 
-//  List<Subcategory> findAllByCatId(Integer catId);
+  //  List<Subcategory> findAllByCatId(Integer catId);
   void deleteByCategory(Category category);
 
 }

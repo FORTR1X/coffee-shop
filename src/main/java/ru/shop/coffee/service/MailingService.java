@@ -40,7 +40,7 @@ public class MailingService {
 
     mailText.append(String.format("%-5s | %-30s | %-5s\n", "ID", "Название товара", "Количество товара"));
 
-    for (int i = 0; i < productDtoList.size(); i ++) {
+    for (int i = 0; i < productDtoList.size(); i++) {
       Integer productID = productDtoList.get(i).getProductId();
       String productHeader = productDto.get(i).getHeader();
       Integer productCount = productDtoList.get(i).getCount();

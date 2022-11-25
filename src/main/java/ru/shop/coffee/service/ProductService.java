@@ -1,13 +1,11 @@
 package ru.shop.coffee.service;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.http.fileupload.FileItem;
-import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import ru.shop.coffee.dto.product.ProductCreateDto;
 import ru.shop.coffee.dto.product.ProductDto;
 import ru.shop.coffee.dto.product.ProductUpdateDto;
@@ -17,19 +15,10 @@ import ru.shop.coffee.mapper.ProductMapper;
 import ru.shop.coffee.repository.ProductRepository;
 import ru.shop.coffee.repository.SubcategoryRepository;
 
-import javax.mail.FolderNotFoundException;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -40,9 +29,14 @@ public class ProductService {
   private final ProductRepository productRepository;
   private final SubcategoryRepository subcategoryRepository;
 
+  private final BestSellersService bestSellersService;
+
   private static final int DEFAULT_PAGE_LIMIT_SIZE = 20;
   private static final int DEFAULT_PAGE_SIZE = 0;
-  private static final String UPLOADS_ABSOLUTE_PATH = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\uploads";
+
+  @Value("${upload.path}")
+  private String UPLOADS_ABSOLUTE_PATH;
+//  private static final String UPLOADS_ABSOLUTE_PATH = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\uploads";
 
   public List<ProductDto> getProductsBySubId(String subId, String limit, String page, String sort) {
     try {
@@ -91,10 +85,12 @@ public class ProductService {
   }
 
   public void deleteById(Integer id) {
+    bestSellersService.deleteById(id);
     productRepository.deleteById(id);
   }
 
   public void deleteAllById(List<Integer> ids) {
+    ids.forEach(bestSellersService::deleteById);
     productRepository.deleteAllById(ids);
   }
 
@@ -126,11 +122,13 @@ public class ProductService {
               subcategory,
               priceFrom == null ? 0 : Integer.parseInt(priceFrom),
               priceTo == null ? 99999 : Integer.parseInt(priceTo),
-              PageRequest.of(page == null ? DEFAULT_PAGE_SIZE :  Integer.parseInt(page), limit == null ? DEFAULT_PAGE_LIMIT_SIZE :  Integer.parseInt(limit),
+              PageRequest.of(page == null ? DEFAULT_PAGE_SIZE : Integer.parseInt(page), limit == null ? DEFAULT_PAGE_LIMIT_SIZE : Integer.parseInt(limit),
                       getSortParam(sort == null ? "id" : sort, "price")));
 
       return productMapper.productsToProductsDto(productList);
-    } catch (NumberFormatException exception) { System.out.println(exception.toString()); }
+    } catch (NumberFormatException exception) {
+      System.out.println(exception.toString());
+    }
 
     return null;
   }
@@ -170,8 +168,7 @@ public class ProductService {
   private void writeProductImages(String productDir, MultipartFile[] files) {
     try {
       for (int i = 0; i < files.length; i++) {
-        Path productDirPath = Paths.get(productDir + "\\" + i + ".jpg");
-        Files.write(productDirPath, files[i].getBytes());
+        files[i].transferTo(new File(productDir + "\\" + i + ".jpg"));
       }
     } catch (IOException e) {
       System.out.println(e.getMessage());
@@ -183,7 +180,9 @@ public class ProductService {
     try {
       makeDirectoryIfNotExist(PRODUCT_DIR);
       writeProductImages(PRODUCT_DIR, files);
-    } catch (Exception e) { System.out.println(e.toString()); }
+    } catch (Exception e) {
+      System.out.println(e.toString());
+    }
   }
 
   public List<String> getImagesProductById(Integer id) {
@@ -196,7 +195,7 @@ public class ProductService {
 
       List<String> urlPathImages = new ArrayList<>();
       for (File image : imageListFiles) {
-        urlPathImages.add("/uploads/product/" + id + "/" + image.getName());
+        urlPathImages.add(UPLOADS_ABSOLUTE_PATH + "\\product\\" + image.getName());
       }
 
       return urlPathImages;
@@ -222,5 +221,3 @@ public class ProductService {
   }
 
 }
-
-// git commit -m "Product: optimize method getProductsBySubcatId, added sort, pagination, find by price for this method"
